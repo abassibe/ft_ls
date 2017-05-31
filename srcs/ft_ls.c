@@ -6,12 +6,11 @@
 /*   By: abassibe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/31 02:30:32 by abassibe          #+#    #+#             */
-/*   Updated: 2017/05/31 04:18:57 by abassibe         ###   ########.fr       */
+/*   Updated: 2017/05/31 06:08:00 by abassibe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ft_ls.h"
-#include "../includes/libft.h"
 
 void			ft_error(char *error)
 {
@@ -98,16 +97,17 @@ int				main(int ac, char **av)
 	t_data			*data;
 
 	data = ft_init_data(av);
-	ft_printf("%s\n", data->options_set);
 	while (data->file->next)
 	{
-		ft_printf("%s\n", data->file->child->d_name);
 		if (data->file->child->d_type == DT_DIR)
 		{
 			//TO DO LIST struct s_directory
 		}
+		else if (data->file->child->d_type == DT_REG)
+			ft_printf("%-10s", data->file->child->d_name);
 		data->file = data->file->next;
 	}
+		ft_printf("\n");
 	ac = 0;
 	return (0);
 }
