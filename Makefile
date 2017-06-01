@@ -6,13 +6,16 @@
 #    By: abassibe <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/02/01 12:45:46 by abassibe          #+#    #+#              #
-#    Updated: 2017/05/31 04:14:02 by abassibe         ###   ########.fr        #
+#    Updated: 2017/06/01 02:49:56 by abassibe         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = ft_ls
 
 SRCS = ft_ls.c \
+	   chk_opt.c \
+	   crea_lst.c \
+	   sort_lst.c
 
 OBJS = $(SRCS:.c=.o)
 
