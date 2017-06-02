@@ -6,7 +6,7 @@
 /*   By: abassibe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/01 02:45:34 by abassibe          #+#    #+#             */
-/*   Updated: 2017/06/01 05:45:36 by abassibe         ###   ########.fr       */
+/*   Updated: 2017/06/02 06:24:31 by abassibe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ t_dirent_list	*add_list(void)
 	return (to_add);
 }
 
-void			make_list_dirent(t_data *data)
+void			make_list_dirent(t_data *data, char *path)
 {
 	t_dirent_list	*dirent_list;
 
@@ -42,9 +42,14 @@ void			make_list_dirent(t_data *data)
 		ft_error("MALLOC FAILED");
 	data->file = dirent_list;
 	data->nb_file = 0;
+	data->len_max_name = 0;
 	while ((dirent_list->child = readdir(data->directory->rep)))
 	{
+		if (ft_strlen(dirent_list->child->d_name) > data->len_max_name)
+			data->len_max_name = ft_strlen(dirent_list->child->d_name);
 		data->nb_file++;
+		if ((stat(ft_strjoin(path, dirent_list->child->d_name), &dirent_list->stat)) == -1)
+			ft_error("stat");
 		dirent_list->next = add_list();
 		dirent_list = dirent_list->next;
 	}
@@ -58,16 +63,19 @@ t_data			*ft_init_data(char **av)
 	if (!(data = (t_data *)malloc(sizeof(t_data))))
 		ft_error("MALLOC FAILED");
 	data->directory = ft_init_dir();
-	data->options_set = ft_strnew(0);;
+	data->options_set = ft_strnew(0);
 	i = check_options(av, &data->options_set);
 	if (av[i])
 	{
 		if (!(data->D_DIR = opendir(av[i])))
 			ft_error("OPEN DIRECTORY FAILED");
+		make_list_dirent(data, ft_strjoin(av[i], "/"));
 	}
 	else
+	{
 		if (!(data->D_DIR = opendir("./")))
 			ft_error("OPEN DIRECTORY FAILED");
-	make_list_dirent(data);
+		make_list_dirent(data, "./");
+	}
 	return (data);
 }

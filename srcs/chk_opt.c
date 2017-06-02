@@ -6,7 +6,7 @@
 /*   By: abassibe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/31 23:25:32 by abassibe          #+#    #+#             */
-/*   Updated: 2017/06/01 01:30:47 by abassibe         ###   ########.fr       */
+/*   Updated: 2017/06/02 05:44:35 by abassibe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	check_next(char **av)
 		{
 			c++;
 			if (!str[c])
-				ft_error("ls: illegal option\nusage: ls [Ralrt] [file ..]");
+				ft_error("ls: illegal option\nusage: ls [Ralrt] [file ...]\n");
 			if (str[c] == av[i][j])
 			{
 				j++;

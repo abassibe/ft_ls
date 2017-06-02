@@ -6,7 +6,7 @@
 /*   By: abassibe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/31 03:00:05 by abassibe          #+#    #+#             */
-/*   Updated: 2017/06/01 05:04:39 by abassibe         ###   ########.fr       */
+/*   Updated: 2017/06/02 06:24:27 by abassibe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,10 @@
 # define FT_LS
 
 #include <sys/types.h>
+#include <sys/stat.h>
 #include <dirent.h>
+#include <unistd.h>
+#include <time.h>
 #include "libft.h"
 #include "ft_printf.h"
 
@@ -32,6 +35,7 @@ typedef struct				s_directory
 typedef struct				s_dirent_list
 {
 	struct dirent			*child;
+	struct stat				stat;
 	struct s_dirent_list	*next;
 }							t_dirent_list;
 
@@ -39,6 +43,7 @@ typedef struct				s_data
 {
 	char					*options_set;
 	int						nb_file;
+	size_t					len_max_name;
 	t_directory				*directory;
 	struct s_dirent_list	*file;
 }							t_data;
@@ -49,7 +54,7 @@ void						ft_error(char *error);
 
 t_directory					*ft_init_dir(void);
 t_dirent_list				*add_list(void);
-void						make_list_dirent(t_data *data);
+void						make_list_dirent(t_data *data, char *path);
 t_data						*ft_init_data(char **av);
 
 void						sort_lst(t_data *data);
