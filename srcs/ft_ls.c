@@ -6,7 +6,7 @@
 /*   By: abassibe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/31 02:30:32 by abassibe          #+#    #+#             */
-/*   Updated: 2017/06/02 05:14:32 by abassibe         ###   ########.fr       */
+/*   Updated: 2017/06/03 05:25:57 by abassibe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,17 +24,8 @@ int				main(int ac, char **av)
 
 	data = ft_init_data(av);
 	sort_lst(data);
-/*	while (data->file->next)
-	{
-		if (data->file->child->d_type == DT_DIR)
-		{
-			//TO DO LIST struct s_directory
-		}
-		else if (data->file->child->d_type == DT_REG)
-			ft_printf("%-10s", data->file->child->d_name);
-		data->file = data->file->next;
-	}
-*/		ft_printf("\n");
+	ft_print(data);
+	ft_printf("\n");
 	ac = 0;
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: abassibe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/31 03:00:05 by abassibe          #+#    #+#             */
-/*   Updated: 2017/06/02 06:24:27 by abassibe         ###   ########.fr       */
+/*   Updated: 2017/06/03 04:19:31 by abassibe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <sys/ioctl.h>
 #include <dirent.h>
 #include <unistd.h>
 #include <time.h>
@@ -58,5 +59,9 @@ void						make_list_dirent(t_data *data, char *path);
 t_data						*ft_init_data(char **av);
 
 void						sort_lst(t_data *data);
+void						sort_alpha(t_data *data, int i, int c);
+void						sort_time(t_data *data, int i, int c);
+
+void						ft_print(t_data *data);
 
 #endif
