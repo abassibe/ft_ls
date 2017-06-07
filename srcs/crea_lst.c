@@ -6,7 +6,7 @@
 /*   By: abassibe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/01 02:45:34 by abassibe          #+#    #+#             */
-/*   Updated: 2017/06/03 05:25:08 by abassibe         ###   ########.fr       */
+/*   Updated: 2017/06/07 05:55:12 by abassibe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ void			make_list_dirent(t_data *data, char *path)
 		ft_error("MALLOC FAILED");
 	data->file = dirent_list;
 	data->nb_file = 0;
+	data->max_link = 0;
 	data->len_max_name = 0;
 	while ((dirent_list->child = readdir(data->directory->rep)))
 	{
@@ -50,6 +51,8 @@ void			make_list_dirent(t_data *data, char *path)
 		data->nb_file++;
 		if ((stat(ft_strjoin(path, dirent_list->child->d_name), &dirent_list->stat)) == -1)
 			ft_error("stat");
+		if (dirent_list->stat.st_nlink > data->max_link)
+			data->max_link = dirent_list->stat.st_nlink;
 		dirent_list->next = add_list();
 		dirent_list = dirent_list->next;
 	}
