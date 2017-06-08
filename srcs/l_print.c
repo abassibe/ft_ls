@@ -6,7 +6,7 @@
 /*   By: abassibe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/07 03:06:27 by abassibe          #+#    #+#             */
-/*   Updated: 2017/06/07 05:55:08 by abassibe         ###   ########.fr       */
+/*   Updated: 2017/06/08 04:58:51 by abassibe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,21 @@ void	mode_right(struct stat stat)
 	}
 }
 
+void	display_size(t_data *data, t_dirent_list *file)
+{
+	int		i;
+	int		j;
+
+	i = 0;
+	j = data->max_size;
+	while (j > 0)
+	{
+		j /= 10;
+		i++;
+	}
+	ft_printf("%*d ", i + 1, file->stat.st_size);
+}
+
 void	l_print(t_data *data)
 {
 	int		i;
@@ -76,18 +91,22 @@ void	l_print(t_data *data)
 	i = 0;
 	k = 0;
 	c = data->nb_file;
-	while (data->max_link > 0)
-	{
-		k++;
-		data->max_link /= 10;
-	}
+	l_print_next(data, &k);
 	while (i < c)
 	{
+		while ((!ft_strchr(data->options_set, 'a')) && data->file->child->d_name[0] == '.')
+		{
+			data->file = data->file->next;
+			i++;
+		}
 		mode_type_file(data->file->stat);
 		mode_right(data->file->stat);
 		ft_printf("%*u", k + 2, data->file->stat.st_nlink);
-		printf(" %s : ", data->file->child->d_name);
-		printf("%u\n", data->file->stat.st_nlink);
+		ft_printf(" %-*s ", data->max_name, data->file->pwuid->pw_name);
+		ft_printf(" %-*s ", data->max_grp, data->file->getgrp->gr_name);
+		display_size(data, data->file);
+		print_date(data->file);
+		print_name(data->file);
 		data->file = data->file->next;
 		i++;
 	}

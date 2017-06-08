@@ -6,7 +6,7 @@
 /*   By: abassibe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/31 03:00:05 by abassibe          #+#    #+#             */
-/*   Updated: 2017/06/07 05:55:10 by abassibe         ###   ########.fr       */
+/*   Updated: 2017/06/08 06:06:40 by abassibe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 #include <dirent.h>
 #include <unistd.h>
 #include <time.h>
+#include <pwd.h>
+#include <grp.h>
 #include "libft.h"
 #include "ft_printf.h"
 
@@ -37,14 +39,21 @@ typedef struct				s_dirent_list
 {
 	struct dirent			*child;
 	struct stat				stat;
+	struct passwd			*pwuid;
+	struct group			*getgrp;
 	struct s_dirent_list	*next;
 }							t_dirent_list;
 
 typedef struct				s_data
 {
+	int						chk;
+	int						total_blk;
 	char					*options_set;
 	int						nb_file;
 	int						max_link;
+	int						max_name;
+	int						max_grp;
+	int						max_size;
 	size_t					len_max_name;
 	t_directory				*directory;
 	struct s_dirent_list	*file;
@@ -65,5 +74,8 @@ void						sort_time(t_data *data, int i, int c);
 
 void						ft_print(t_data *data);
 void						l_print(t_data *data);
+void						l_print_next(t_data *data, int *k);
+void						print_date(t_dirent_list *file);
+void						print_name(t_dirent_list *file);
 
 #endif

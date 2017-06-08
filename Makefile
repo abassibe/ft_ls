@@ -6,7 +6,7 @@
 #    By: abassibe <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/02/01 12:45:46 by abassibe          #+#    #+#              #
-#    Updated: 2017/06/07 03:12:52 by abassibe         ###   ########.fr        #
+#    Updated: 2017/06/08 04:17:36 by abassibe         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,9 @@ SRCS = ft_ls.c \
 	   sort_lst.c \
 	   sort_next.c \
 	   ft_print.c \
-	   l_print.c
+	   l_print.c \
+	   l_print_next.c \
+	   print_date.c
 
 OBJS = $(SRCS:.c=.o)
 
