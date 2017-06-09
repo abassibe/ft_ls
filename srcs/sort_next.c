@@ -6,34 +6,25 @@
 /*   By: abassibe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/03 03:04:23 by abassibe          #+#    #+#             */
-/*   Updated: 2017/06/08 05:57:41 by abassibe         ###   ########.fr       */
+/*   Updated: 2017/06/09 04:36:33 by abassibe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ft_ls.h"
 
-void	sort_swap(t_data *data, t_dirent_list *tmp)
+void	sort_swap(t_data *data, t_info *tmp)
 {
-	tmp->stat = data->file->stat;
-	data->file->stat = data->file->next->stat;
-	data->file->next->stat = tmp->stat;
-	tmp->pwuid = data->file->pwuid;
-	data->file->pwuid = data->file->next->pwuid;
-	data->file->next->pwuid = tmp->pwuid;
-	tmp->getgrp = data->file->getgrp;
-	data->file->getgrp = data->file->next->getgrp;
-	data->file->next->getgrp = tmp->getgrp;
-	tmp->child = data->file->child;
-	data->file->child = data->file->next->child;
-	data->file->next->child = tmp->child;
+	tmp = data->file->infos;
+	data->file->infos = data->file->next->infos;
+	data->file->next->infos = tmp;
 }
 
 void	sort_alpha(t_data *data, int i, int c)
 {
 	t_dirent_list	*addr;
-	t_dirent_list	*tmp;
+	t_info			*tmp;
 
-	if (!(tmp = (t_dirent_list *)malloc(sizeof(t_dirent_list))))
+	if (!(tmp = (t_info *)malloc(sizeof(t_info))))
 		ft_error("MALLOC FAILED");
 	addr = data->file;
 	while (i < data->nb_file)
@@ -44,7 +35,7 @@ void	sort_alpha(t_data *data, int i, int c)
 			i++;
 			c = data->nb_file;
 		}
-		if (c > 1 && (ft_strcmp(NAME, NEXT_NAME) > 0))
+		if (c > 1 && (ft_strcmp(data->file->infos->name, data->file->next->infos->name) > 0))
 			sort_swap(data, tmp);
 		data->file = data->file->next;
 		c--;
@@ -55,12 +46,12 @@ void	sort_alpha(t_data *data, int i, int c)
 void	sort_time(t_data *data, int i, int c)
 {
 	t_dirent_list	*addr;
-	t_dirent_list	*tmp;
+	t_info			*tmp;
 
-	if (!(tmp = (t_dirent_list *)malloc(sizeof(t_dirent_list))))
+	if (!(tmp = (t_info *)malloc(sizeof(t_info))))
 		ft_error("MALLOC FAILED");
 	addr = data->file;
-	while (i < data->nb_file)
+	while (i < data->nb_file * 2)
 	{
 		if (c == 0)
 		{
@@ -68,9 +59,9 @@ void	sort_time(t_data *data, int i, int c)
 			i++;
 			c = data->nb_file;
 		}
-		if (c > 1 && (data->file->stat.st_mtime < data->file->next->stat.st_mtime))
+		if (c > 1 && (data->file->infos->mtime < data->file->next->infos->mtime))
 			sort_swap(data, tmp);
-		else if (c > 1 && (data->file->stat.st_mtimespec.tv_nsec < data->file->next->stat.st_mtimespec.tv_nsec))
+		else if (c > 1 && (data->file->infos->mtime_nsec < data->file->next->infos->mtime_nsec))
 			sort_swap(data, tmp);
 		data->file = data->file->next;
 		c--;

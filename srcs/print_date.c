@@ -6,7 +6,7 @@
 /*   By: abassibe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/08 02:49:48 by abassibe          #+#    #+#             */
-/*   Updated: 2017/06/08 03:32:43 by abassibe         ###   ########.fr       */
+/*   Updated: 2017/06/09 05:18:50 by abassibe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,10 +74,10 @@ void	print_date(t_dirent_list *file)
 {
 	char	*str;
 
-	str = ctime(&file->stat.st_mtime);
+	str = ctime(&file->infos->mtime);
 	ft_printf("%2d ", get_day(str));
 	ft_printf("%3s ", get_month(str));
-	if ((time(NULL) - file->stat.st_mtime) < 15778800)
+	if ((time(NULL) - file->infos->mtime) < 15778800)
 		ft_printf("%s", get_hour(str));
 	else
 		ft_printf("%d", get_year(str));

@@ -6,7 +6,7 @@
 /*   By: abassibe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/31 03:00:05 by abassibe          #+#    #+#             */
-/*   Updated: 2017/06/08 06:06:40 by abassibe         ###   ########.fr       */
+/*   Updated: 2017/06/09 06:09:44 by abassibe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,19 +35,32 @@ typedef struct				s_directory
 	struct directory		*next;
 }							t_directory;
 
+typedef struct				s_info
+{
+	char					*name;
+	unsigned char			d_type;
+	unsigned int			mode;
+	int						nlink;
+	int						uid;
+	int						gid;
+	long long int			size;
+	long long int			blocks;
+	long int				mtime;
+	long int				mtime_nsec;
+	char					*pw_name;
+	char					*gr_name;
+}							t_info;
+
 typedef struct				s_dirent_list
 {
-	struct dirent			*child;
-	struct stat				stat;
-	struct passwd			*pwuid;
-	struct group			*getgrp;
+	t_info					*infos;
 	struct s_dirent_list	*next;
 }							t_dirent_list;
 
 typedef struct				s_data
 {
-	int						chk;
 	int						total_blk;
+	char					*path;
 	char					*options_set;
 	int						nb_file;
 	int						max_link;
@@ -76,6 +89,6 @@ void						ft_print(t_data *data);
 void						l_print(t_data *data);
 void						l_print_next(t_data *data, int *k);
 void						print_date(t_dirent_list *file);
-void						print_name(t_dirent_list *file);
+void						print_name(t_data *data, t_dirent_list *file);
 
 #endif

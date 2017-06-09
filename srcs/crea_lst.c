@@ -6,7 +6,7 @@
 /*   By: abassibe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/01 02:45:34 by abassibe          #+#    #+#             */
-/*   Updated: 2017/06/08 06:06:37 by abassibe         ###   ########.fr       */
+/*   Updated: 2017/06/09 06:09:42 by abassibe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ t_directory		*ft_init_dir(void)
 	t_directory		*directory;
 
 	if (!(directory = (t_directory *)malloc(sizeof(t_directory))))
+		ft_error("MALLOC FAILED");
+	if (!(directory->rep = (DIR *)malloc(sizeof(DIR))))
 		ft_error("MALLOC FAILED");
 	D_DIR = NULL;
 	D_NEXT = NULL;
@@ -29,40 +31,57 @@ t_dirent_list	*add_list(void)
 
 	if (!(to_add = (t_dirent_list *)malloc(sizeof(t_dirent_list))))
 		ft_error("MALLOC FAILED");
-	to_add->child = NULL;
+	if (!(to_add->infos = (t_info *)malloc(sizeof(t_info))))
+		ft_error("MALLOC FAILED");
 	to_add->next = NULL;
-	to_add->pwuid = NULL;
-	to_add->getgrp = NULL;
 	return (to_add);
+}
+
+void			fill_infos(t_data *data, t_dirent_list *dirent_list)
+{
+	if (dirent_list->infos->nlink > data->max_link)
+		data->max_link = dirent_list->infos->nlink;
+	if (data->max_size < dirent_list->infos->size)
+		data->max_size = dirent_list->infos->size;
+	if (data->max_name < (int)ft_strlen(dirent_list->infos->pw_name))
+		data->max_name = (int)ft_strlen(dirent_list->infos->pw_name);
+	if (data->max_grp < (int)ft_strlen(dirent_list->infos->gr_name))
+		data->max_grp = (int)ft_strlen(dirent_list->infos->gr_name);
+	data->total_blk += dirent_list->infos->blocks;
 }
 
 void			get_data(t_data *data, t_dirent_list *dirent_list, char *path)
 {
-	if (ft_strlen(dirent_list->child->d_name) > data->len_max_name)
-		data->len_max_name = ft_strlen(dirent_list->child->d_name);
+	struct stat		getstat;
+	struct passwd	*pwuid;
+	struct group	*getgrp;
+
+	if (ft_strlen(dirent_list->infos->name) > data->len_max_name)
+		data->len_max_name = ft_strlen(dirent_list->infos->name);
 	data->nb_file++;
-	if ((stat(ft_strjoin(path, dirent_list->child->d_name), &dirent_list->stat)) == -1)
+	if ((stat(ft_strjoin(path, dirent_list->infos->name), &getstat)) == -1)
 		ft_error("stat");
-	if (dirent_list->stat.st_nlink > data->max_link)
-		data->max_link = dirent_list->stat.st_nlink;
-	if (!(dirent_list->pwuid = getpwuid(dirent_list->stat.st_uid)))
+	dirent_list->infos->mode = getstat.st_mode;
+	dirent_list->infos->nlink = getstat.st_nlink;
+	dirent_list->infos->uid = getstat.st_uid;
+	dirent_list->infos->gid = getstat.st_gid;
+	dirent_list->infos->size = getstat.st_size;
+	dirent_list->infos->blocks = getstat.st_blocks;
+	dirent_list->infos->mtime = getstat.st_mtime;
+	dirent_list->infos->mtime_nsec = getstat.st_mtimespec.tv_nsec;
+	if (!(pwuid = getpwuid(dirent_list->infos->uid)))
 		ft_error("getpwuid");
-	if (!(dirent_list->getgrp = getgrgid(dirent_list->stat.st_gid)))
+	if (!(getgrp = getgrgid(dirent_list->infos->gid)))
 		ft_error("getgrgid");
-	if (data->max_size < dirent_list->stat.st_size)
-		data->max_size = dirent_list->stat.st_size;
-	if (data->max_name < (int)ft_strlen(dirent_list->pwuid->pw_name))
-		data->max_name = (int)ft_strlen(dirent_list->pwuid->pw_name);
-	if (data->max_grp < (int)ft_strlen(dirent_list->getgrp->gr_name))
-		data->max_grp = (int)ft_strlen(dirent_list->getgrp->gr_name);
-	data->total_blk += dirent_list->stat.st_blocks;
-//	printf("%s\n", dirent_list->child->d_name);
+	dirent_list->infos->pw_name = ft_strdup(pwuid->pw_name);
+	dirent_list->infos->gr_name = ft_strdup(getgrp->gr_name);
+	fill_infos(data, dirent_list);
 }
 
 void			make_list_dirent(t_data *data, char *path)
 {
 	t_dirent_list	*dirent_list;
-//	int		i = 0;
+	struct dirent	*child;
 
 	dirent_list = add_list();
 	data->file = dirent_list;
@@ -73,24 +92,22 @@ void			make_list_dirent(t_data *data, char *path)
 	data->total_blk = 0;
 	data->max_name = 0;
 	data->max_grp = 0;
-	while ((dirent_list->child = readdir(data->directory->rep)))
+	data->path = ft_strdup(path);
+	while ((child = readdir(data->directory->rep)))
 	{
+		dirent_list->infos->d_type = child->d_type;
+		dirent_list->infos->name = ft_strdup(child->d_name);
 		get_data(data, dirent_list, path);
 		dirent_list->next = add_list();
 		dirent_list = dirent_list->next;
 	}
-/*	while (i < data->nb_file)
-	{
-		printf("%s\n", data->file->child->d_name);
-		data->file = data->file->next;
-		i++;
-	}*/
 }
 
 t_data			*ft_init_data(char **av)
 {
 	t_data			*data;
 	int				i;
+	struct stat		sb;
 
 	if (!(data = (t_data *)malloc(sizeof(t_data))))
 		ft_error("MALLOC FAILED");
@@ -99,17 +116,19 @@ t_data			*ft_init_data(char **av)
 	i = check_options(av, &data->options_set);
 	if (av[i])
 	{
+	if (stat(av[i], &sb) == -1)
+		ft_error("stat");
+	if (!S_ISDIR(sb.st_mode))
+		printf("fichier\n");
 		if (!(data->D_DIR = opendir(av[i])))
 			ft_error("OPEN DIRECTORY FAILED");
 		make_list_dirent(data, ft_strjoin(av[i], "/"));
-		data->chk = 1;
 	}
 	else
 	{
 		if (!(data->D_DIR = opendir("./")))
 			ft_error("OPEN DIRECTORY FAILED");
 		make_list_dirent(data, "./");
-		data->chk = 0;
 	}
 	return (data);
 }
