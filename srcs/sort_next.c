@@ -6,7 +6,7 @@
 /*   By: abassibe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/03 03:04:23 by abassibe          #+#    #+#             */
-/*   Updated: 2017/06/09 04:36:33 by abassibe         ###   ########.fr       */
+/*   Updated: 2017/06/10 01:16:13 by abassibe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	sort_time(t_data *data, int i, int c)
 	if (!(tmp = (t_info *)malloc(sizeof(t_info))))
 		ft_error("MALLOC FAILED");
 	addr = data->file;
-	while (i < data->nb_file * 2)
+	while (i < data->nb_file)
 	{
 		if (c == 0)
 		{

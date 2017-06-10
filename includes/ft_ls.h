@@ -6,7 +6,7 @@
 /*   By: abassibe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/31 03:00:05 by abassibe          #+#    #+#             */
-/*   Updated: 2017/06/09 06:09:44 by abassibe         ###   ########.fr       */
+/*   Updated: 2017/06/10 05:58:52 by abassibe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,11 @@
 #include "libft.h"
 #include "ft_printf.h"
 
-# define D_DIR directory->rep
-# define D_NEXT directory->next
-# define NAME data->file->child->d_name
-# define NEXT_NAME data->file->next->child->d_name
+#define MINORBITS       20
+#define MINORMASK       ((1U << MINORBITS) - 1)
+
+#define MAJOR(dev)      ((unsigned int) ((dev) >> MINORBITS))
+#define MINOR(dev)      ((unsigned int) ((dev) & MINORMASK))
 
 typedef struct				s_directory
 {
@@ -49,6 +50,7 @@ typedef struct				s_info
 	long int				mtime_nsec;
 	char					*pw_name;
 	char					*gr_name;
+	dev_t					rdev;
 }							t_info;
 
 typedef struct				s_dirent_list
@@ -68,6 +70,7 @@ typedef struct				s_data
 	int						max_grp;
 	int						max_size;
 	size_t					len_max_name;
+	int						chk;
 	t_directory				*directory;
 	struct s_dirent_list	*file;
 }							t_data;
@@ -86,7 +89,8 @@ void						sort_alpha(t_data *data, int i, int c);
 void						sort_time(t_data *data, int i, int c);
 
 void						ft_print(t_data *data);
-void						l_print(t_data *data);
+void						one_print(t_data *data, int i);
+void						l_print(t_data *data, int i, int k);
 void						l_print_next(t_data *data, int *k);
 void						print_date(t_dirent_list *file);
 void						print_name(t_data *data, t_dirent_list *file);

@@ -6,7 +6,7 @@
 /*   By: abassibe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/01 02:45:34 by abassibe          #+#    #+#             */
-/*   Updated: 2017/06/09 06:09:42 by abassibe         ###   ########.fr       */
+/*   Updated: 2017/06/10 05:59:34 by abassibe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@ t_directory		*ft_init_dir(void)
 		ft_error("MALLOC FAILED");
 	if (!(directory->rep = (DIR *)malloc(sizeof(DIR))))
 		ft_error("MALLOC FAILED");
-	D_DIR = NULL;
-	D_NEXT = NULL;
+	directory->rep = NULL;
+	directory->next = NULL;
 	return (directory);
 }
 
@@ -59,7 +59,7 @@ void			get_data(t_data *data, t_dirent_list *dirent_list, char *path)
 	if (ft_strlen(dirent_list->infos->name) > data->len_max_name)
 		data->len_max_name = ft_strlen(dirent_list->infos->name);
 	data->nb_file++;
-	if ((stat(ft_strjoin(path, dirent_list->infos->name), &getstat)) == -1)
+	if ((lstat(ft_strjoin(path, dirent_list->infos->name), &getstat)) == -1)
 		ft_error("stat");
 	dirent_list->infos->mode = getstat.st_mode;
 	dirent_list->infos->nlink = getstat.st_nlink;
@@ -69,6 +69,7 @@ void			get_data(t_data *data, t_dirent_list *dirent_list, char *path)
 	dirent_list->infos->blocks = getstat.st_blocks;
 	dirent_list->infos->mtime = getstat.st_mtime;
 	dirent_list->infos->mtime_nsec = getstat.st_mtimespec.tv_nsec;
+	dirent_list->infos->rdev = getstat.st_rdev;
 	if (!(pwuid = getpwuid(dirent_list->infos->uid)))
 		ft_error("getpwuid");
 	if (!(getgrp = getgrgid(dirent_list->infos->gid)))
@@ -98,6 +99,9 @@ void			make_list_dirent(t_data *data, char *path)
 		dirent_list->infos->d_type = child->d_type;
 		dirent_list->infos->name = ft_strdup(child->d_name);
 		get_data(data, dirent_list, path);
+		if (S_ISCHR(dirent_list->infos->mode) ||
+				S_ISBLK(dirent_list->infos->mode))
+			data->chk = 1;
 		dirent_list->next = add_list();
 		dirent_list = dirent_list->next;
 	}
@@ -120,13 +124,13 @@ t_data			*ft_init_data(char **av)
 		ft_error("stat");
 	if (!S_ISDIR(sb.st_mode))
 		printf("fichier\n");
-		if (!(data->D_DIR = opendir(av[i])))
+		if (!(data->directory->rep = opendir(av[i])))
 			ft_error("OPEN DIRECTORY FAILED");
 		make_list_dirent(data, ft_strjoin(av[i], "/"));
 	}
 	else
 	{
-		if (!(data->D_DIR = opendir("./")))
+		if (!(data->directory->rep = opendir("./")))
 			ft_error("OPEN DIRECTORY FAILED");
 		make_list_dirent(data, "./");
 	}

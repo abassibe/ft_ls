@@ -6,7 +6,7 @@
 /*   By: abassibe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/31 23:25:32 by abassibe          #+#    #+#             */
-/*   Updated: 2017/06/09 03:42:17 by abassibe         ###   ########.fr       */
+/*   Updated: 2017/06/10 01:34:02 by abassibe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	check_next(char **av)
 	int		c;
 	int		j;
 
-	str = "-lRrat";
+	str = "-l1Rrat";
 	i = 1;
 	c = -1;
 	j = 0;
@@ -47,7 +47,7 @@ int		check_options(char **av, char **options_set)
 	char	*options;
 
 	i = 0;
-	options = ft_strdup("lRart");
+	options = ft_strdup("l1Rart");
 	if (av[1])
 	{
 		if (av[1][0] != '-')
