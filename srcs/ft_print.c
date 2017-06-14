@@ -6,7 +6,7 @@
 /*   By: abassibe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/03 04:10:27 by abassibe          #+#    #+#             */
-/*   Updated: 2017/06/10 02:42:56 by abassibe         ###   ########.fr       */
+/*   Updated: 2017/06/14 02:21:49 by abassibe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,35 +30,34 @@ void	print_name_no_opt(t_data *data, t_dirent_list *file)
 		ft_printf("{blue}%-*s", data->len_max_name + 1, file->infos->name);
 }
 
-void	no_opt_print(t_data *data)
+void	no_opt_print(t_data *data, int i, int c)
 {
-	int				i;
-	int				c;
 	int				len;
 	struct winsize	w;
 
-	i = 0;
 	len = 0;
-	c = data->nb_file;
 	ioctl(0, TIOCGWINSZ, &w);
-	while (i < c - 1)
+	while (i < c)
 	{
-		while ((!ft_strchr(data->options_set, 'a')) && data->file->infos->name[0] == '.')
+		if ((!ft_strchr(data->options_set, 'a')) && data->file->infos->name[0] == '.')
 		{
 			data->file = data->file->next;
 			i++;
 		}
-		print_name_no_opt(data, data->file);
-		len += data->len_max_name + 1;
-		data->file = data->file->next;
-		i++;
-		if (i < c - 1 && (len + (data->len_max_name * 2) + 1 >= w.ws_col))
+		else
 		{
 			print_name_no_opt(data, data->file);
-			ft_printf("\n");
-			len = 0;
+			len += data->len_max_name + 1;
 			data->file = data->file->next;
 			i++;
+			if (i < c - 1 && (len + (data->len_max_name * 2) + 1 >= w.ws_col))
+			{
+				print_name_no_opt(data, data->file);
+				ft_printf("\n");
+				len = 0;
+				data->file = data->file->next;
+				i++;
+			}
 		}
 	}
 	write(1, "\n", 1);
@@ -76,5 +75,8 @@ void	ft_print(t_data *data)
 	else if (ft_strchr(data->options_set, '1'))
 		one_print(data, i);
 	else
-		no_opt_print(data);
+	{
+		k = data->nb_file;
+		no_opt_print(data, i, k);
+	}
 }

@@ -6,7 +6,7 @@
 /*   By: abassibe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/01 02:45:34 by abassibe          #+#    #+#             */
-/*   Updated: 2017/06/10 05:59:34 by abassibe         ###   ########.fr       */
+/*   Updated: 2017/06/14 04:49:52 by abassibe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,25 +105,22 @@ void			make_list_dirent(t_data *data, char *path)
 		dirent_list->next = add_list();
 		dirent_list = dirent_list->next;
 	}
+	dirent_list = NULL;
 }
 
-t_data			*ft_init_data(char **av)
+t_data			*ft_init_data(char **av, t_data *data, int i)
 {
-	t_data			*data;
-	int				i;
 	struct stat		sb;
 
-	if (!(data = (t_data *)malloc(sizeof(t_data))))
-		ft_error("MALLOC FAILED");
-	data->directory = ft_init_dir();
-	data->options_set = ft_strnew(0);
-	i = check_options(av, &data->options_set);
 	if (av[i])
 	{
-	if (stat(av[i], &sb) == -1)
-		ft_error("stat");
-	if (!S_ISDIR(sb.st_mode))
-		printf("fichier\n");
+		if (stat(av[i], &sb) == -1)
+			ft_error("stat");
+		if (!S_ISDIR(sb.st_mode))
+		{
+			ft_printf("%s\n", av[i]);
+			exit (0);
+		}
 		if (!(data->directory->rep = opendir(av[i])))
 			ft_error("OPEN DIRECTORY FAILED");
 		make_list_dirent(data, ft_strjoin(av[i], "/"));

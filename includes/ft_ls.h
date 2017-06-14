@@ -6,7 +6,7 @@
 /*   By: abassibe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/31 03:00:05 by abassibe          #+#    #+#             */
-/*   Updated: 2017/06/10 05:58:52 by abassibe         ###   ########.fr       */
+/*   Updated: 2017/06/14 06:09:13 by abassibe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ void						ft_error(char *error);
 t_directory					*ft_init_dir(void);
 t_dirent_list				*add_list(void);
 void						make_list_dirent(t_data *data, char *path);
-t_data						*ft_init_data(char **av);
+t_data						*ft_init_data(char **av, t_data *data, int i);
 
 void						sort_lst(t_data *data);
 void						sort_alpha(t_data *data, int i, int c);
@@ -94,5 +94,7 @@ void						l_print(t_data *data, int i, int k);
 void						l_print_next(t_data *data, int *k);
 void						print_date(t_dirent_list *file);
 void						print_name(t_data *data, t_dirent_list *file);
+
+void						recurs(t_data *data, char **av, int i);
 
 #endif
