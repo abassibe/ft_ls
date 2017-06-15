@@ -6,7 +6,7 @@
 /*   By: abassibe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/14 02:48:45 by abassibe          #+#    #+#             */
-/*   Updated: 2017/06/14 06:09:11 by abassibe         ###   ########.fr       */
+/*   Updated: 2017/06/15 05:54:09 by abassibe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,17 +21,19 @@ void	search_directory(t_data *data, char **av, DIR *rep, int i)
 	if (av[i])
 		str[0] = ft_strdup(av[i]);
 	else
-		str[0] = ft_strdup("./");
+		str[0] = ft_strdup(".");
 	while ((dir = readdir(rep)))
 	{
-		if (dir->d_type == 4 && !(ft_strequ(dir->d_name, ".")) && !(ft_strequ(dir->d_name, "..")))
+		if (dir->d_name[0] == '.' && !ft_strchr(data->options_set, 'a'))
+			i = 0;
+		else if (dir->d_type == 4 && !(ft_strequ(dir->d_name, ".")) && !(ft_strequ(dir->d_name, "..")))
 		{
+			str[0] = ft_strjoin(str[0], "/");
 			str[0] = ft_strjoin(str[0], dir->d_name);
 			ft_printf("\n%s:\n", str[0]);
 			ft_init_data(str, data, 0);
 			sort_lst(data);
 			ft_print(data);
-			str[0] = ft_strjoin(str[0], "/");
 			if (!(rep = opendir(str[0])))
 				ft_error("OPEN DIRECTORY FAILED");
 			search_directory(data, str, rep, 0);

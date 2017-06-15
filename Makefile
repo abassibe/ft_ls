@@ -6,7 +6,7 @@
 #    By: abassibe <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/02/01 12:45:46 by abassibe          #+#    #+#              #
-#    Updated: 2017/06/14 02:53:15 by abassibe         ###   ########.fr        #
+#    Updated: 2017/06/15 05:15:14 by abassibe         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,7 +36,7 @@ $(NAME):
 	@gcc $(FLAGS) -c $(addprefix $(SRCPATH), $(SRCS)) \
 		-I includes/
 	@make -C libft
-	@gcc $(FLAGS) $(OBJS) libft/libft.a libft/libftprintf.a -o $(NAME)
+	@gcc $(FLAGS) $(OBJS) libft/libftprintf.a -o $(NAME)
 
 .PHONY: all clean fclean re
 
@@ -46,7 +46,7 @@ clean:
 
 fclean: clean
 	@make -C libft fclean
-	@rm -rf libft/libft.a $(NAME)
+	@rm -rf libft/libftprintf.a $(NAME)
 
 re: fclean all
 

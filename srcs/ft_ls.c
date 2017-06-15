@@ -6,7 +6,7 @@
 /*   By: abassibe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/31 02:30:32 by abassibe          #+#    #+#             */
-/*   Updated: 2017/06/14 04:03:06 by abassibe         ###   ########.fr       */
+/*   Updated: 2017/06/15 04:34:29 by abassibe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void			ft_error(char *error)
 {
 	perror(error);
-	exit(0);
+	exit(1);
 }
 
 int				main(int ac, char **av)
