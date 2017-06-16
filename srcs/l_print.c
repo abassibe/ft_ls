@@ -6,7 +6,7 @@
 /*   By: abassibe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/07 03:06:27 by abassibe          #+#    #+#             */
-/*   Updated: 2017/06/10 03:48:17 by abassibe         ###   ########.fr       */
+/*   Updated: 2017/06/16 06:12:11 by abassibe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	mode_right(t_info *infos)
 	int		j;
 
 	j = 0;
-	ft_sprintf(&perm, "%lo\n", (unsigned long) infos->mode);
+	ft_sprintf(&perm, "%lo\n", (unsigned long)infos->mode);
 	i = (int)ft_strlen(perm) - 4;
 	while (j < 3)
 	{
@@ -65,23 +65,6 @@ void	mode_right(t_info *infos)
 		i++;
 		j++;
 	}
-}
-
-void	display_size(t_data *data, t_dirent_list *file)
-{
-	int		i;
-	int		j;
-
-	i = 0;
-	j = data->max_size;
-	if (S_ISCHR(file->infos->mode) || S_ISBLK(file->infos->mode))
-		return ;
-	while (j > 0)
-	{
-		j /= 10;
-		i++;
-	}
-	ft_printf("%*d ", i + 1, file->infos->size);
 }
 
 void	maj_min_bloc_print(t_data *data, t_dirent_list *file)
@@ -104,24 +87,25 @@ void	l_print(t_data *data, int i, int k)
 	l_print_next(data, &k);
 	while (i < data->nb_file)
 	{
-		if  ((!ft_strchr(data->options_set, 'a')) && data->file->infos->name[0] == '.')
+		if ((!ft_strchr(data->options_set, 'a')) &&
+				data->file->infos->name[0] == '.')
 		{
 			data->file = data->file->next;
 			i++;
 		}
 		else
 		{
-		mode_type_file(data->file->infos);
-		mode_right(data->file->infos);
-		ft_printf("%*u", k + 2, data->file->infos->nlink);
-		ft_printf(" %-*s ", data->max_name, data->file->infos->pw_name);
-		ft_printf(" %-*s ", data->max_grp, data->file->infos->gr_name);
-		maj_min_bloc_print(data, data->file);
-		display_size(data, data->file);
-		print_date(data->file);
-		print_name(data, data->file);
-		data->file = data->file->next;
-		i++;
+			mode_type_file(data->file->infos);
+			mode_right(data->file->infos);
+			ft_printf("%*u", k + 2, data->file->infos->nlink);
+			ft_printf(" %-*s ", data->max_name, data->file->infos->pw_name);
+			ft_printf(" %-*s ", data->max_grp, data->file->infos->gr_name);
+			maj_min_bloc_print(data, data->file);
+			display_size(data, data->file);
+			print_date(data->file);
+			print_name(data, data->file);
+			data->file = data->file->next;
+			i++;
 		}
 	}
 }

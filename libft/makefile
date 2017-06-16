@@ -6,7 +6,7 @@
 #    By: abassibe <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/02/01 12:45:46 by abassibe          #+#    #+#              #
-#    Updated: 2017/06/15 05:13:22 by abassibe         ###   ########.fr        #
+#    Updated: 2017/06/16 05:47:42 by abassibe         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -129,34 +129,10 @@ $(addprefix objs/, $(OBJS2)): $(addprefix srcs/, $(PRINTFSRC))
 			@printf "\033[0;35m.\033[0m"
 				@gcc $(FLAGS) -c $(addprefix srcs/, $(addsuffix .c, $(basename $(notdir $@)))) -o objs/$(notdir $@) -I includes/
 
-main: a.out
-		@printf "\033[0;31m- Executing a.out -\n\033[0m"
-			@./a.out
-				@printf "\033[0;31m-- End of a.out --\n\033[0m"
-
-a.out: $(NAME) main.c
-		@gcc -Wall -Wextra main.c -L. -lftprintf -I includes/
-
-test: test.out
-		@printf "\033[0;31m- Executing test.out -\n\033[0m"
-			@./test.out $(ARGS)
-				@printf "\033[0;31m-- End of test.out --\n\033[0m"
-
-test.out: $(NAME) test.c
-		@gcc -Wall -Wextra test.c -L. -lftprintf -I includes/ -o test.out
-
 clean:
 		@rm -rdf objs/
 
 fclean: clean
 		@rm -f $(NAME)
-
-mainclean:
-		@rm -f a.out
-
-testclean:
-		@rm -f test.out
-
-cleanall: mainclean testclean fclean
 
 re: fclean all

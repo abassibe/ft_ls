@@ -6,7 +6,7 @@
 /*   By: abassibe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/03 03:04:23 by abassibe          #+#    #+#             */
-/*   Updated: 2017/06/10 01:16:13 by abassibe         ###   ########.fr       */
+/*   Updated: 2017/06/16 06:28:12 by abassibe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ void	sort_alpha(t_data *data, int i, int c)
 			i++;
 			c = data->nb_file;
 		}
-		if (c > 1 && (ft_strcmp(data->file->infos->name, data->file->next->infos->name) > 0))
+		if (c > 1 && (ft_strcmp(data->file->infos->name,
+						data->file->next->infos->name) > 0))
 			sort_swap(data, tmp);
 		data->file = data->file->next;
 		c--;
@@ -59,9 +60,11 @@ void	sort_time(t_data *data, int i, int c)
 			i++;
 			c = data->nb_file;
 		}
-		if (c > 1 && (data->file->infos->mtime < data->file->next->infos->mtime))
+		if (c > 1 && (data->file->infos->mtime <
+					data->file->next->infos->mtime))
 			sort_swap(data, tmp);
-		else if (c > 1 && (data->file->infos->mtime_nsec < data->file->next->infos->mtime_nsec))
+		else if (c > 1 && (data->file->infos->mtime_nsec <
+					data->file->next->infos->mtime_nsec))
 			sort_swap(data, tmp);
 		data->file = data->file->next;
 		c--;

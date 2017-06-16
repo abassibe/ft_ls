@@ -6,7 +6,7 @@
 /*   By: abassibe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/03 04:10:27 by abassibe          #+#    #+#             */
-/*   Updated: 2017/06/14 02:21:49 by abassibe         ###   ########.fr       */
+/*   Updated: 2017/06/16 06:03:19 by abassibe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,35 +30,40 @@ void	print_name_no_opt(t_data *data, t_dirent_list *file)
 		ft_printf("{blue}%-*s", data->len_max_name + 1, file->infos->name);
 }
 
+void	no_opt_print_next(t_data *data, int *len, int *i, int c)
+{
+	struct winsize	w;
+
+	ioctl(0, TIOCGWINSZ, &w);
+	print_name_no_opt(data, data->file);
+	(*len) += data->len_max_name + 1;
+	data->file = data->file->next;
+	(*i)++;
+	if (*i < c - 1 && (*len + (data->len_max_name * 2) + 1 >= w.ws_col))
+	{
+		print_name_no_opt(data, data->file);
+		ft_printf("\n");
+		(*len) = 0;
+		data->file = data->file->next;
+		(*i)++;
+	}
+}
+
 void	no_opt_print(t_data *data, int i, int c)
 {
 	int				len;
-	struct winsize	w;
 
 	len = 0;
-	ioctl(0, TIOCGWINSZ, &w);
 	while (i < c)
 	{
-		if ((!ft_strchr(data->options_set, 'a')) && data->file->infos->name[0] == '.')
+		if ((!ft_strchr(data->options_set, 'a')) &&
+				data->file->infos->name[0] == '.')
 		{
 			data->file = data->file->next;
 			i++;
 		}
 		else
-		{
-			print_name_no_opt(data, data->file);
-			len += data->len_max_name + 1;
-			data->file = data->file->next;
-			i++;
-			if (i < c - 1 && (len + (data->len_max_name * 2) + 1 >= w.ws_col))
-			{
-				print_name_no_opt(data, data->file);
-				ft_printf("\n");
-				len = 0;
-				data->file = data->file->next;
-				i++;
-			}
-		}
+			no_opt_print_next(data, &len, &i, c);
 	}
 	write(1, "\n", 1);
 }
@@ -79,4 +84,5 @@ void	ft_print(t_data *data)
 		k = data->nb_file;
 		no_opt_print(data, i, k);
 	}
+	closedir(data->directory->rep);
 }

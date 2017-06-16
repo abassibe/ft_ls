@@ -6,29 +6,38 @@
 /*   By: abassibe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/31 03:00:05 by abassibe          #+#    #+#             */
-/*   Updated: 2017/06/14 06:09:13 by abassibe         ###   ########.fr       */
+/*   Updated: 2017/06/16 06:33:33 by abassibe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_LS
-# define FT_LS
+#ifndef FT_LS_H
+# define FT_LS_H
 
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <sys/ioctl.h>
-#include <dirent.h>
-#include <unistd.h>
-#include <time.h>
-#include <pwd.h>
-#include <grp.h>
-#include "libft.h"
-#include "ft_printf.h"
+# include <sys/types.h>
+# include <sys/stat.h>
+# include <sys/ioctl.h>
+# include <dirent.h>
+# include <unistd.h>
+# include <time.h>
+# include <pwd.h>
+# include <grp.h>
+# include <errno.h>
+# include "libft.h"
+# include "ft_printf.h"
 
-#define MINORBITS       20
-#define MINORMASK       ((1U << MINORBITS) - 1)
+# define MINORBITS       20
+# define MINORMASK       ((1U << MINORBITS) - 1)
 
-#define MAJOR(dev)      ((unsigned int) ((dev) >> MINORBITS))
-#define MINOR(dev)      ((unsigned int) ((dev) & MINORMASK))
+# define MAJOR(dev)      ((unsigned int) ((dev) >> MINORBITS))
+# define MINOR(dev)      ((unsigned int) ((dev) & MINORMASK))
+
+typedef struct				s_recurs
+{
+	DIR						*rep;
+	char					*path;
+	struct dirent			*dir;
+	struct s_recurs			*next;
+}							t_recurs;
 
 typedef struct				s_directory
 {
@@ -92,9 +101,16 @@ void						ft_print(t_data *data);
 void						one_print(t_data *data, int i);
 void						l_print(t_data *data, int i, int k);
 void						l_print_next(t_data *data, int *k);
+void						display_size(t_data *data, t_dirent_list *file);
 void						print_date(t_dirent_list *file);
 void						print_name(t_data *data, t_dirent_list *file);
 
 void						recurs(t_data *data, char **av, int i);
 
+void						print_one_file(struct stat sb, char *name);
+void						print_date_one_file(struct stat sb);
+void						print_name_one_file(struct stat sb, char *name);
+
+void						search_directory(t_data *data, char **av,
+		t_recurs *lst, int i);
 #endif

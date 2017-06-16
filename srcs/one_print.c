@@ -6,7 +6,7 @@
 /*   By: abassibe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/10 01:31:03 by abassibe          #+#    #+#             */
-/*   Updated: 2017/06/10 02:28:22 by abassibe         ###   ########.fr       */
+/*   Updated: 2017/06/16 06:05:18 by abassibe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@ void	one_print(t_data *data, int i)
 {
 	while (i < data->nb_file)
 	{
-		while ((!ft_strchr(data->options_set, 'a')) && data->file->infos->name[0] == '.')
+		while ((!ft_strchr(data->options_set, 'a')) &&
+				data->file->infos->name[0] == '.')
 		{
 			data->file = data->file->next;
 			i++;

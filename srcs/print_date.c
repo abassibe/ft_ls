@@ -6,13 +6,13 @@
 /*   By: abassibe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/08 02:49:48 by abassibe          #+#    #+#             */
-/*   Updated: 2017/06/09 05:18:50 by abassibe         ###   ########.fr       */
+/*   Updated: 2017/06/16 06:08:18 by abassibe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ft_ls.h"
 
-int		get_day(char *str)
+static int	get_day(char *str)
 {
 	int		i;
 	int		ret;
@@ -25,7 +25,7 @@ int		get_day(char *str)
 	return (ret);
 }
 
-char	*get_month(char *str)
+static char	*get_month(char *str)
 {
 	int		i;
 	int		j;
@@ -42,7 +42,7 @@ char	*get_month(char *str)
 	return (ret);
 }
 
-char	*get_hour(char *str)
+static char	*get_hour(char *str)
 {
 	int		i;
 	int		j;
@@ -59,7 +59,7 @@ char	*get_hour(char *str)
 	return (ret);
 }
 
-int		get_year(char *str)
+static int	get_year(char *str)
 {
 	int		i;
 
@@ -70,7 +70,7 @@ int		get_year(char *str)
 	return (ft_atoi(&str[i]));
 }
 
-void	print_date(t_dirent_list *file)
+void		print_date(t_dirent_list *file)
 {
 	char	*str;
 

@@ -6,36 +6,11 @@
 /*   By: abassibe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/01 02:45:34 by abassibe          #+#    #+#             */
-/*   Updated: 2017/06/14 04:49:52 by abassibe         ###   ########.fr       */
+/*   Updated: 2017/06/16 06:07:04 by abassibe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ft_ls.h"
-
-t_directory		*ft_init_dir(void)
-{
-	t_directory		*directory;
-
-	if (!(directory = (t_directory *)malloc(sizeof(t_directory))))
-		ft_error("MALLOC FAILED");
-	if (!(directory->rep = (DIR *)malloc(sizeof(DIR))))
-		ft_error("MALLOC FAILED");
-	directory->rep = NULL;
-	directory->next = NULL;
-	return (directory);
-}
-
-t_dirent_list	*add_list(void)
-{
-	t_dirent_list	*to_add;
-
-	if (!(to_add = (t_dirent_list *)malloc(sizeof(t_dirent_list))))
-		ft_error("MALLOC FAILED");
-	if (!(to_add->infos = (t_info *)malloc(sizeof(t_info))))
-		ft_error("MALLOC FAILED");
-	to_add->next = NULL;
-	return (to_add);
-}
 
 void			fill_infos(t_data *data, t_dirent_list *dirent_list)
 {
@@ -118,8 +93,8 @@ t_data			*ft_init_data(char **av, t_data *data, int i)
 			ft_error("stat");
 		if (!S_ISDIR(sb.st_mode))
 		{
-			ft_printf("%s\n", av[i]);
-			exit (0);
+			print_one_file(sb, av[i]);
+			exit(0);
 		}
 		if (!(data->directory->rep = opendir(av[i])))
 			ft_error("OPEN DIRECTORY FAILED");
