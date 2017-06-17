@@ -6,7 +6,7 @@
 /*   By: abassibe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/31 03:00:05 by abassibe          #+#    #+#             */
-/*   Updated: 2017/06/16 06:33:33 by abassibe         ###   ########.fr       */
+/*   Updated: 2017/06/17 06:27:39 by abassibe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@
 # include <errno.h>
 # include "libft.h"
 # include "ft_printf.h"
+
+# define DATA data->file
 
 # define MINORBITS       20
 # define MINORMASK       ((1U << MINORBITS) - 1)
@@ -56,6 +58,7 @@ typedef struct				s_info
 	long long int			size;
 	long long int			blocks;
 	long int				mtime;
+	long int				atime;
 	long int				mtime_nsec;
 	char					*pw_name;
 	char					*gr_name;
@@ -79,6 +82,7 @@ typedef struct				s_data
 	int						max_grp;
 	int						max_size;
 	size_t					len_max_name;
+	int						nul;
 	int						chk;
 	t_directory				*directory;
 	struct s_dirent_list	*file;
@@ -96,13 +100,14 @@ t_data						*ft_init_data(char **av, t_data *data, int i);
 void						sort_lst(t_data *data);
 void						sort_alpha(t_data *data, int i, int c);
 void						sort_time(t_data *data, int i, int c);
+void						sort_utime(t_data *data, int i, int c);
 
 void						ft_print(t_data *data);
 void						one_print(t_data *data, int i);
 void						l_print(t_data *data, int i, int k);
 void						l_print_next(t_data *data, int *k);
 void						display_size(t_data *data, t_dirent_list *file);
-void						print_date(t_dirent_list *file);
+void						print_date(t_data *data, t_dirent_list *file);
 void						print_name(t_data *data, t_dirent_list *file);
 
 void						recurs(t_data *data, char **av, int i);

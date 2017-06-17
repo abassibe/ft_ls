@@ -6,36 +6,30 @@
 /*   By: abassibe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/01 02:50:12 by abassibe          #+#    #+#             */
-/*   Updated: 2017/06/16 05:38:54 by abassibe         ###   ########.fr       */
+/*   Updated: 2017/06/17 05:00:23 by abassibe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ft_ls.h"
 
-t_dirent_list	*creat_elem(void)
+void			sort_rev(t_dirent_list **file, int i, t_data *data)
 {
-	t_dirent_list	*new;
+	t_dirent_list	*current;
+	t_dirent_list	*tmp1;
+	t_dirent_list	*tmp2;
 
-	if (!(new = malloc(sizeof(t_dirent_list))))
-		ft_error("Malloc");
-	return (new);
-}
-
-t_dirent_list	*sort_rev(t_dirent_list *file, int i, t_data *data)
-{
-	t_dirent_list	*new;
-	t_dirent_list	*suivant;
-
+	current = *file;
+	tmp1 = NULL;
+	tmp2 = NULL;
 	while (i < data->nb_file)
 	{
-		suivant = creat_elem();
-		suivant = file->next;
-		file->next = new;
-		new = file;
-		file = suivant;
+		tmp1 = current;
+		current = current->next;
+		tmp1->next = tmp2;
+		tmp2 = tmp1;
 		i++;
 	}
-	return (new);
+	*file = tmp1;
 }
 
 void			sort_lst(t_data *data)
@@ -45,9 +39,10 @@ void			sort_lst(t_data *data)
 
 	i = 0;
 	c = data->nb_file;
-	sort_alpha(data, i, c);
-	if (ft_strchr(data->options_set, 't'))
+	if (!ft_strchr(data->options_set, 'f'))
+		sort_alpha(data, i, c);
+	if (ft_strchr(data->options_set, 't') && !ft_strchr(data->options_set, 'f'))
 		sort_time(data, i, c);
-	if (ft_strchr(data->options_set, 'r'))
-		data->file = sort_rev(data->file, i, data);
+	if (ft_strchr(data->options_set, 'r') && !ft_strchr(data->options_set, 'f'))
+		sort_rev(&data->file, i, data);
 }

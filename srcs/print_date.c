@@ -6,7 +6,7 @@
 /*   By: abassibe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/08 02:49:48 by abassibe          #+#    #+#             */
-/*   Updated: 2017/06/16 06:08:18 by abassibe         ###   ########.fr       */
+/*   Updated: 2017/06/17 04:31:48 by abassibe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,15 +70,28 @@ static int	get_year(char *str)
 	return (ft_atoi(&str[i]));
 }
 
-void		print_date(t_dirent_list *file)
+void		print_date(t_data *data, t_dirent_list *file)
 {
 	char	*str;
 
-	str = ctime(&file->infos->mtime);
-	ft_printf("%2d ", get_day(str));
-	ft_printf("%3s ", get_month(str));
-	if ((time(NULL) - file->infos->mtime) < 15778800)
-		ft_printf("%s", get_hour(str));
+	if (ft_strchr(data->options_set, 'u'))
+	{
+		str = ctime(&file->infos->atime);
+		ft_printf("%2d ", get_day(str));
+		ft_printf("%3s ", get_month(str));
+		if ((time(NULL) - file->infos->atime) < 15778800)
+			ft_printf("%s", get_hour(str));
+		else
+			ft_printf("%d", get_year(str));
+	}
 	else
-		ft_printf("%d", get_year(str));
+	{
+		str = ctime(&file->infos->mtime);
+		ft_printf("%2d ", get_day(str));
+		ft_printf("%3s ", get_month(str));
+		if ((time(NULL) - file->infos->mtime) < 15778800)
+			ft_printf("%s", get_hour(str));
+		else
+			ft_printf("%d", get_year(str));
+	}
 }

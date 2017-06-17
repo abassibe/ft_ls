@@ -6,7 +6,7 @@
 /*   By: abassibe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/07 03:06:27 by abassibe          #+#    #+#             */
-/*   Updated: 2017/06/16 06:12:11 by abassibe         ###   ########.fr       */
+/*   Updated: 2017/06/17 06:22:15 by abassibe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,25 +87,24 @@ void	l_print(t_data *data, int i, int k)
 	l_print_next(data, &k);
 	while (i < data->nb_file)
 	{
-		if ((!ft_strchr(data->options_set, 'a')) &&
+		if (((!ft_strchr(data->options_set, 'a')) &&
+					(!ft_strchr(data->options_set, 'f'))) &&
 				data->file->infos->name[0] == '.')
-		{
 			data->file = data->file->next;
-			i++;
-		}
 		else
 		{
 			mode_type_file(data->file->infos);
 			mode_right(data->file->infos);
 			ft_printf("%*u", k + 2, data->file->infos->nlink);
-			ft_printf(" %-*s ", data->max_name, data->file->infos->pw_name);
+			if (!ft_strchr(data->options_set, 'g'))
+				ft_printf(" %-*s ", data->max_name, data->file->infos->pw_name);
 			ft_printf(" %-*s ", data->max_grp, data->file->infos->gr_name);
 			maj_min_bloc_print(data, data->file);
 			display_size(data, data->file);
-			print_date(data->file);
+			print_date(data, data->file);
 			print_name(data, data->file);
 			data->file = data->file->next;
-			i++;
 		}
+		i++;
 	}
 }

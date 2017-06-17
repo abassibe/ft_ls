@@ -6,7 +6,7 @@
 /*   By: abassibe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/03 03:04:23 by abassibe          #+#    #+#             */
-/*   Updated: 2017/06/16 06:28:12 by abassibe         ###   ########.fr       */
+/*   Updated: 2017/06/17 04:57:41 by abassibe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	sort_alpha(t_data *data, int i, int c)
 		{
 			data->file = addr;
 			i++;
-			c = data->nb_file;
+			c = data->nb_file - i;
 		}
 		if (c > 1 && (ft_strcmp(data->file->infos->name,
 						data->file->next->infos->name) > 0))
@@ -51,23 +51,22 @@ void	sort_time(t_data *data, int i, int c)
 
 	if (!(tmp = (t_info *)malloc(sizeof(t_info))))
 		ft_error("MALLOC FAILED");
-	addr = data->file;
+	addr = DATA;
 	while (i < data->nb_file)
 	{
 		if (c == 0)
 		{
 			data->file = addr;
 			i++;
-			c = data->nb_file;
+			c = data->nb_file - i;
 		}
-		if (c > 1 && (data->file->infos->mtime <
-					data->file->next->infos->mtime))
+		if (c > 1 && (DATA->infos->mtime < DATA->next->infos->mtime))
 			sort_swap(data, tmp);
-		else if (c > 1 && (data->file->infos->mtime_nsec <
-					data->file->next->infos->mtime_nsec))
+		else if (c > 1 && (DATA->infos->mtime == DATA->next->infos->mtime) &&
+				(DATA->infos->mtime_nsec < DATA->next->infos->mtime_nsec))
 			sort_swap(data, tmp);
-		data->file = data->file->next;
+		DATA = data->file->next;
 		c--;
 	}
-	data->file = addr;
+	DATA = addr;
 }

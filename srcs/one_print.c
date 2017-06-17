@@ -6,7 +6,7 @@
 /*   By: abassibe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/10 01:31:03 by abassibe          #+#    #+#             */
-/*   Updated: 2017/06/16 06:05:18 by abassibe         ###   ########.fr       */
+/*   Updated: 2017/06/17 06:27:57 by abassibe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,11 @@ void	one_print(t_data *data, int i)
 {
 	while (i < data->nb_file)
 	{
-		while ((!ft_strchr(data->options_set, 'a')) &&
+		if (((!ft_strchr(data->options_set, 'a')) &&
+					(!ft_strchr(data->options_set, 'a'))) &&
 				data->file->infos->name[0] == '.')
-		{
-			data->file = data->file->next;
-			i++;
-		}
-		if (S_ISDIR(data->file->infos->mode))
+			data->nul = 0;
+		else if (S_ISDIR(data->file->infos->mode))
 			ft_printf("{cyan}%-s\n", data->file->infos->name);
 		else if (S_ISREG(data->file->infos->mode))
 			ft_printf("%-s\n", data->file->infos->name);

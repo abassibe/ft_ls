@@ -6,13 +6,13 @@
 /*   By: abassibe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/01 02:45:34 by abassibe          #+#    #+#             */
-/*   Updated: 2017/06/16 06:07:04 by abassibe         ###   ########.fr       */
+/*   Updated: 2017/06/17 04:49:48 by abassibe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ft_ls.h"
 
-void			fill_infos(t_data *data, t_dirent_list *dirent_list)
+void	fill_infos(t_data *data, t_dirent_list *dirent_list)
 {
 	if (dirent_list->infos->nlink > data->max_link)
 		data->max_link = dirent_list->infos->nlink;
@@ -23,9 +23,26 @@ void			fill_infos(t_data *data, t_dirent_list *dirent_list)
 	if (data->max_grp < (int)ft_strlen(dirent_list->infos->gr_name))
 		data->max_grp = (int)ft_strlen(dirent_list->infos->gr_name);
 	data->total_blk += dirent_list->infos->blocks;
+	if (dirent_list->infos->name[0] == '.' &&
+			!ft_strchr(data->options_set, 'a'))
+		data->total_blk -= dirent_list->infos->blocks;
 }
 
-void			get_data(t_data *data, t_dirent_list *dirent_list, char *path)
+void	get_stat(t_dirent_list *dirent_list, struct stat getstat)
+{
+	dirent_list->infos->mode = getstat.st_mode;
+	dirent_list->infos->nlink = getstat.st_nlink;
+	dirent_list->infos->uid = getstat.st_uid;
+	dirent_list->infos->gid = getstat.st_gid;
+	dirent_list->infos->size = getstat.st_size;
+	dirent_list->infos->blocks = getstat.st_blocks;
+	dirent_list->infos->mtime = getstat.st_mtime;
+	dirent_list->infos->mtime_nsec = getstat.st_mtimespec.tv_nsec;
+	dirent_list->infos->rdev = getstat.st_rdev;
+	dirent_list->infos->atime = getstat.st_atime;
+}
+
+void	get_data(t_data *data, t_dirent_list *dirent_list, char *path)
 {
 	struct stat		getstat;
 	struct passwd	*pwuid;
@@ -36,15 +53,7 @@ void			get_data(t_data *data, t_dirent_list *dirent_list, char *path)
 	data->nb_file++;
 	if ((lstat(ft_strjoin(path, dirent_list->infos->name), &getstat)) == -1)
 		ft_error("stat");
-	dirent_list->infos->mode = getstat.st_mode;
-	dirent_list->infos->nlink = getstat.st_nlink;
-	dirent_list->infos->uid = getstat.st_uid;
-	dirent_list->infos->gid = getstat.st_gid;
-	dirent_list->infos->size = getstat.st_size;
-	dirent_list->infos->blocks = getstat.st_blocks;
-	dirent_list->infos->mtime = getstat.st_mtime;
-	dirent_list->infos->mtime_nsec = getstat.st_mtimespec.tv_nsec;
-	dirent_list->infos->rdev = getstat.st_rdev;
+	get_stat(dirent_list, getstat);
 	if (!(pwuid = getpwuid(dirent_list->infos->uid)))
 		ft_error("getpwuid");
 	if (!(getgrp = getgrgid(dirent_list->infos->gid)))
@@ -54,7 +63,7 @@ void			get_data(t_data *data, t_dirent_list *dirent_list, char *path)
 	fill_infos(data, dirent_list);
 }
 
-void			make_list_dirent(t_data *data, char *path)
+void	make_list_dirent(t_data *data, char *path)
 {
 	t_dirent_list	*dirent_list;
 	struct dirent	*child;
@@ -83,7 +92,7 @@ void			make_list_dirent(t_data *data, char *path)
 	dirent_list = NULL;
 }
 
-t_data			*ft_init_data(char **av, t_data *data, int i)
+t_data	*ft_init_data(char **av, t_data *data, int i)
 {
 	struct stat		sb;
 
