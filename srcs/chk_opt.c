@@ -6,7 +6,7 @@
 /*   By: abassibe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/31 23:25:32 by abassibe          #+#    #+#             */
-/*   Updated: 2017/06/17 06:31:57 by abassibe         ###   ########.fr       */
+/*   Updated: 2017/06/21 01:46:06 by abassibe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,4 +60,18 @@ int		check_options(char **av, char **options_set)
 		*options_set = ft_strjoin(*options_set, av[i]);
 	}
 	return (i);
+}
+
+void	get_stat_rst(t_dirent_list *dirent_list)
+{
+	dirent_list->infos->mode = 0;
+	dirent_list->infos->nlink = 0;
+	dirent_list->infos->uid = 0;
+	dirent_list->infos->gid = 0;
+	dirent_list->infos->size = 0;
+	dirent_list->infos->blocks = 0;
+	dirent_list->infos->mtime = 0;
+	dirent_list->infos->mtime_nsec = 0;
+	dirent_list->infos->rdev = 0;
+	dirent_list->infos->atime = 0;
 }

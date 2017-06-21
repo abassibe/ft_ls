@@ -6,7 +6,7 @@
 /*   By: abassibe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/14 02:48:45 by abassibe          #+#    #+#             */
-/*   Updated: 2017/06/16 06:32:29 by abassibe         ###   ########.fr       */
+/*   Updated: 2017/06/21 01:27:29 by abassibe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,8 @@ void		search_next(t_data *data, t_recurs *lst)
 		sort_lst(data);
 		ft_print(data);
 		search_directory(data, str, lst->next, 0);
+		free(str);
+		free(lst->next);
 	}
 }
 
@@ -67,7 +69,7 @@ void		recurs_next(t_data *data, t_recurs *lst, char **av, int i)
 	struct stat		sb;
 
 	if (stat("./", &sb) == -1)
-		ft_error("stat");
+		ft_error("stat1");
 	if (!S_ISDIR(sb.st_mode))
 	{
 		ft_init_data(av, data, i);
@@ -90,16 +92,14 @@ void		recurs(t_data *data, char **av, int i)
 	if (av[i])
 	{
 		if (stat(av[i], &sb) == -1)
-			ft_error("stat");
+			ft_error("stat2");
 		if (!S_ISDIR(sb.st_mode))
-		{
-			ft_printf("%s\n", av[i]);
 			exit(0);
-		}
 		if (!(lst->rep = opendir(av[i])))
 			ft_error("OPEN DIRECTORY FAILED");
 		ft_init_data(av, data, i);
 		sort_lst(data);
+		printf("%s\n", av[i]);
 		ft_print(data);
 		search_directory(data, av, lst, i);
 	}

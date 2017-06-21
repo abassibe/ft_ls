@@ -6,7 +6,7 @@
 /*   By: abassibe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/01 02:45:34 by abassibe          #+#    #+#             */
-/*   Updated: 2017/06/17 04:49:48 by abassibe         ###   ########.fr       */
+/*   Updated: 2017/06/21 01:48:12 by abassibe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,12 +52,19 @@ void	get_data(t_data *data, t_dirent_list *dirent_list, char *path)
 		data->len_max_name = ft_strlen(dirent_list->infos->name);
 	data->nb_file++;
 	if ((lstat(ft_strjoin(path, dirent_list->infos->name), &getstat)) == -1)
-		ft_error("stat");
-	get_stat(dirent_list, getstat);
+		get_stat_rst(dirent_list);
+	else
+		get_stat(dirent_list, getstat);
 	if (!(pwuid = getpwuid(dirent_list->infos->uid)))
-		ft_error("getpwuid");
+	{
+		dirent_list->infos->pw_name = ft_strnew(0);
+		return ;
+	}
 	if (!(getgrp = getgrgid(dirent_list->infos->gid)))
-		ft_error("getgrgid");
+	{
+		dirent_list->infos->gr_name = ft_strnew(0);
+		return ;
+	}
 	dirent_list->infos->pw_name = ft_strdup(pwuid->pw_name);
 	dirent_list->infos->gr_name = ft_strdup(getgrp->gr_name);
 	fill_infos(data, dirent_list);
@@ -99,7 +106,7 @@ t_data	*ft_init_data(char **av, t_data *data, int i)
 	if (av[i])
 	{
 		if (stat(av[i], &sb) == -1)
-			ft_error("stat");
+			ft_error("stat4");
 		if (!S_ISDIR(sb.st_mode))
 		{
 			print_one_file(sb, av[i]);
@@ -107,7 +114,10 @@ t_data	*ft_init_data(char **av, t_data *data, int i)
 		}
 		if (!(data->directory->rep = opendir(av[i])))
 			ft_error("OPEN DIRECTORY FAILED");
-		make_list_dirent(data, ft_strjoin(av[i], "/"));
+		if (av[i][0] == '/' && av[i][1] == 0)
+			make_list_dirent(data, av[i]);
+		else
+			make_list_dirent(data, ft_strjoin(av[i], "/"));
 	}
 	else
 	{

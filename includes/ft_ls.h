@@ -6,7 +6,7 @@
 /*   By: abassibe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/31 03:00:05 by abassibe          #+#    #+#             */
-/*   Updated: 2017/06/17 06:27:39 by abassibe         ###   ########.fr       */
+/*   Updated: 2017/06/21 01:45:30 by abassibe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,7 @@ t_directory					*ft_init_dir(void);
 t_dirent_list				*add_list(void);
 void						make_list_dirent(t_data *data, char *path);
 t_data						*ft_init_data(char **av, t_data *data, int i);
+void						get_stat_rst(t_dirent_list *dirent_list);
 
 void						sort_lst(t_data *data);
 void						sort_alpha(t_data *data, int i, int c);

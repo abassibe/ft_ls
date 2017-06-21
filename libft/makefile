@@ -6,7 +6,7 @@
 #    By: abassibe <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/02/01 12:45:46 by abassibe          #+#    #+#              #
-#    Updated: 2017/06/16 05:47:42 by abassibe         ###   ########.fr        #
+#    Updated: 2017/06/20 23:46:37 by abassibe         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -116,7 +116,7 @@ OBJS1 = $(LFTSRC:.c=.o)
 all: $(NAME)
 
 $(NAME): $(addprefix objs/, $(OBJS2)) $(addprefix objs/, $(OBJS1))
-		@printf "\033[0;35m> Compiling libftprintf.a\033[0m"
+		@printf "\033[0;35m> Compiling ft_ls\033[0m"
 			@ar rc $(NAME) $(addprefix objs/, $(OBJS))
 				@printf "\033[0;32m > OK\n\033[0m"
 
